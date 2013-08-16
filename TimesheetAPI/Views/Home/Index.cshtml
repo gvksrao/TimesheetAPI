@@ -1,0 +1,80 @@
+﻿<header>
+    <div class="content-wrapper">
+        <div class="float-left">
+            <p class="site-title">
+                <a href="~/">Timesheet Application</a></p>
+        </div>
+    </div>
+</header>
+<div id="body">
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                <h1>
+                    Welcome to Timesheet Application</h1>
+                <h2>Somesh </h2>
+            </hgroup>
+            <p>
+                Some Text Here.
+            </p>
+            <p>            </p>
+        </div>
+    </section>
+    <section class="content-wrapper main-content clear-fix">
+        <h3>
+            We suggest the following steps:</h3>
+        <ol class="round">
+            <li class="one">
+                <h5>
+                    Setup Your Company
+                </h5>
+             Register Your Company Login
+             </li>
+            <li class="two">
+                <h5>Setup Employee</h5>
+                Create Employees</li>
+            <li class="three">
+                <h5>Enter Timesheet</h5>
+                <ul id="Company" />
+                <div>
+                    <h2>Search by ID</h2>
+                    <input type="text" id="prodId" size="5" />
+                    <input type="button" value="Search" onclick="find();" />
+                <p id="product" />
+        </div>
+                </li>
+        </ol>
+    </section>
+</div>
+
+@section scripts {
+<script>
+    var apiUrl = 'api/Company';
+
+    $(document).ready(function () {
+        // Send an AJAX request
+        $.getJSON(apiUrl)
+            .done(function (data) {
+                // On success, 'data' contains a list of products.
+                $.each(data, function (key, item) {
+                    // Add a list item for the product.
+                    $('<li>', { text: formatItem(item) }).appendTo($('#Company'));
+                });
+            });
+        });
+
+        function formatItem(item) {
+            return item.Name + ': ' + item.Description;
+        }
+        function find() {
+            var id = $('#prodId').val();
+            $.getJSON(apiUrl + '/' + id)
+            .done(function (data) {
+                $('#product').text(formatItem(data));
+            })
+            .fail(function (jqXHR, textStatus, err) {
+                $('#product').text('Error: ' + err);
+            });
+        }
+ </script>
+}
